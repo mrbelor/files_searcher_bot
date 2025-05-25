@@ -3,7 +3,7 @@ import file_manager
 import api_service
 
 def main():
-    base = dao_service.DataBase(db_name='TESTING_15123')
+    base = dao_service.DataBase(db_name='main')
 
     files = file_manager.FileManager(base)
     bot = api_service.BotCore(file_manager=files, database=base)
@@ -31,7 +31,7 @@ def main():
 def test_scenario():
     '''сценарий чтобы добавить файлы в базу данных
     выполнять 1 раз!'''
-    base = dao_service.DataBase(db_name='TESTING_15123')
+    base = dao_service.DataBase(db_name='main')
     files = file_manager.FileManager(base)
     files.runPath('./files/')
     print(base)
