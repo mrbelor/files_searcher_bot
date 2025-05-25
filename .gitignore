@@ -1,0 +1,41 @@
+# Python: байткод и кеш
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Базы данных
+*.db
+
+# Среды и зависимости
+env/
+.venv/
+venv/
+ENV/
+pip-wheel-metadata/
+
+# Временные файлы
+*~
+*.tmp
+*.bak
+.pytest_cache/
+*.log
+
+*error*
+error.txt
+
+# Системные файлы
+.DS_Store
+.cache/
+
+# Секреты
+*secret*
+secrets.json
+
+# MongoDB data
+**/MongoData/
+
+# Tesseract tessdata
+**/tessdata/
+
+# Отчёты: картинки
+**/reports_imgs/
