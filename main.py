@@ -33,7 +33,7 @@ def test_scenario():
     выполнять 1 раз!'''
     base = dao_service.DataBase(db_name='TESTING_15123')
     files = file_manager.FileManager(base)
-    files.runPath('./test_files_root/')
+    files.runPath('./files/')
     print(base)
 
 
