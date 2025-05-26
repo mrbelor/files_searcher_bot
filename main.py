@@ -34,7 +34,7 @@ def test_scenario():
     base = dao_service.DataBase(db_name='main')
     files = file_manager.FileManager(base)
     files.runPath('./files/')
-    print(base)
+    #print(base)
 
 
 def cli_database():

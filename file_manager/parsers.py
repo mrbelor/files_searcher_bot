@@ -219,9 +219,12 @@ class PdfParser(BaseParser):
 				
 				# Получаем все рамки (Rect) данного XREF на странице
 				rects = page.get_image_rects(xref)  # возвращает список Rect с координатами
-				if len(rects) > 1: print(f'\033[91m<ОЧЕНЬ РЕДКАЯ ОШИБКА №412>\033[0m\n{rects=}')
+				#if len(rects) > 1: print(f'\033[91m<ОЧЕНЬ РЕДКАЯ ОШИБКА №412>\033[0m\n{rects=}')
 
-				pic_box = (rects[0].x0, rects[0].y0, rects[0].x1, rects[0].y1)
+				if rects:
+					pic_box = (rects[0].x0, rects[0].y0, rects[0].x1, rects[0].y1)
+				else:
+					continue
 				
 				''' вроде ненужный кусок кода
 				if len(rects) > 1:

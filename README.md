@@ -12,9 +12,9 @@
 
 ## Примеры использования
 
-[![image.png|450](https://i.postimg.cc/3xdrFGY5/image.png)](https://postimg.cc/9DHjWrDJ)
+<img src="https://i.postimg.cc/3xdrFGY5/image.png" alt="Пример поиска" width="450px"/>
 
-[![image.png|450](https://i.postimg.cc/mDXB9ZJ2/image.png)](https://postimg.cc/1nqkhSyL)
+<img src="https://i.postimg.cc/mDXB9ZJ2/image.png" alt="Настройка фильтров" width="450px"/>
 
 Общие инструкции по использованию 📝:
 1. Введите поисковый запрос в боте телеграм
@@ -58,7 +58,6 @@ def main():
    и ваш телеграм id (по желанию)
 в виде:
 ```json
-// secrets.json
 {
   "BOT_TOKEN": "TELEGRAM_API",
   "ADMIN_IDS": [1234567]
