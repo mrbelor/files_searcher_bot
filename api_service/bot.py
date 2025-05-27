@@ -1,4 +1,4 @@
-import uuid, telebot, json
+import uuid, telebot, json, os
 
 from telebot.types import Message, CallbackQuery, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton
 from telebot.apihelper import ApiTelegramException
@@ -126,7 +126,12 @@ class BotCore:
                 text = "В базе нет документов."
             else:
                 text = "Все документы в БД:\n" + "\n".join(lines)
-            self.bot.reply_to(m, text)
+
+            with open("list.txt", "w", encoding="utf-8") as f:
+                f.write(text)
+
+            self.bot.send_document(m.chat.id, open("list.txt", "rb"))
+            os.remove("list.txt")
 
         @self.bot.message_handler(func=lambda m: m.text and not m.text.startswith('/'))
         def search_handler(m: Message):
@@ -408,6 +413,7 @@ class BotCore:
                         try:
                             self.bot.send_document(admin, open("error.txt", "rb"))
                             sent = True
+                            os.remove("error.txt")
                             break
                         except:
                             print("Не удалось отправить сообщение об ошибке")

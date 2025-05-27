@@ -5,28 +5,16 @@ from pathlib import Path
 
 def main():
     base = dao_service.DataBase(db_name='main')
-
     files = file_manager.FileManager(base)
+
     bot = api_service.BotCore(file_manager=files, database=base)
-    
     bot.start(no_fall=True)
 
-
     '''
-    СПИСОК
-    # OK: отрисовка обводки не фиксированная ширина, а в зависимости от размера страницы. в процентах.
-
-    # OK: переделать example.json и пикчу на jsoncrack
-    # OK: при запросе "vector" Дата: 2025-05-18 02:29:30 
-    #          при запросе "типы" Дата: 18.10.2023
-    # OK: скачивание файлов.
-    # OK: поиск по двум и более словам
-    
-    # OК: загрузка файлов админами
-    # OК: фильтры по тегам!!
     # TODO: переделать report_store?
     # TODO: возможный ложный наход в kmpSearch?
     '''
+
 
 def regex_check(directory):
     file_manager.FileManager().parsers['.pdf']._filenameToDict(Path(directory))
@@ -79,6 +67,7 @@ def cli_database():
             case _:
                 print("Выход")
                 break
+
 
 def cli_file_transfer():
     # Инициализация FileManager (без привязки к базе, если не требуется)

@@ -164,6 +164,8 @@ class PdfParser(BaseParser):
 		pdf_path = Path(pdf_path)
 		print(f"{cb('PdfParser.run')}: {pdf_path}")
 
+		RESULT_dict = self.initMetadata(pdf_path) # classmethod можно вызывать и через экземпляр. 🤯
+
 		doc = fitz.open(str(pdf_path)) # наш документик
 		
 		all_text = '' # полный сплошной текст с файла
@@ -262,7 +264,6 @@ class PdfParser(BaseParser):
 			'''
 		
 		# формирование результирующего документа
-		RESULT_dict = self.initMetadata(pdf_path) # classmethod можно вызывать и через экземпляр. 🤯
 		RESULT_dict['pages'] = all_pages
 		RESULT_dict['text'] = all_text
 		RESULT_dict['len_pages'] = len(doc)
