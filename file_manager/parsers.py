@@ -63,15 +63,19 @@ class BaseParser(ABC):
 	
 	@staticmethod
 	def _filenameToDict(file_path:Path):
+		filename = file_path.name
+		filename = filename.replace('и\u0306','й') # fix макбуковского написания буквы й (вот так: й)
+		filename = filename.replace('е\u0308','ё') # fix макбуковского написания буквы ё (вот так: ё)
+
 
 		dateFormat = lambda date_str: datetime.strptime(date_str, "%Y%m%d").strftime("%d.%m.%Y") # date_str '20250313' => '13.03.2025'
-		m = FILE_REGEX.match(file_path.name)
+		m = FILE_REGEX.match(filename)
 
 		if not m:
-			print(f"BaseParser._filenameToDict {ERROR}: REGEX, {m=}, {file_path.name}, {list(file_path.name)=}")
+			print(f"BaseParser._filenameToDict {ERROR}: REGEX, {m=}, {filename}, {list(filename)=}")
 			return {}
 		else:
-			print(f"BaseParser._filenameToDict {OK}: REGEX, {file_path.name}, {m=}, {m.groups()=}")
+			print(f"BaseParser._filenameToDict {OK}: REGEX, {filename}, {m=}, {m.groups()=}")
 		res = {
 			"subject": m.group(1) or "",
 			"number": m.group(2) or "",

@@ -1,6 +1,7 @@
 import dao_service
 import file_manager
 import api_service
+from pathlib import Path
 
 def main():
     base = dao_service.DataBase(db_name='main')
@@ -27,7 +28,16 @@ def main():
     # TODO: возможный ложный наход в kmpSearch?
     '''
 
+def regex_check(directory):
+    file_manager.FileManager().parsers['.pdf']._filenameToDict(Path(directory))
 
+
+def regex_check_dir(directory):
+    directory = Path(directory)
+    for file in directory.rglob('*.pdf'):
+        regex_check(file)
+
+    
 def test_scenario():
     '''сценарий чтобы добавить файлы в базу данных
     выполнять 1 раз!'''
@@ -111,4 +121,3 @@ if __name__ == '__main__':
 
     #test_scenario()
     main()
-    
