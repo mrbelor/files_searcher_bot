@@ -67,6 +67,11 @@ class JsonHandler:
 		else:
 			print(f'JsonHandler.importFromJson {OK}: json<{file_path}> -> inserted {len(result.inserted_ids)} документов')
 
+	def __iter__(self):
+        # Позволяет итерировать по экземпляру
+        for doc in self.collection.find({}):
+            yield doc
+
 
 class UtilityDBTools:
 
@@ -154,6 +159,22 @@ class UtilityDBTools:
 		# Прямой вызов C++: list автоматически конвертируется в std::vector<std::string> при передаче в функцию kmpSearch
 		res_cpp = cppyy.gbl.kmpSearch(haystack, needle)
 		return list(res_cpp)
+
+
+	def rebase(self, new_base_path):
+        """
+        Обходит все документы, берёт старый путь из поля 'path',
+        сохраняет имя файла и обновляет 'path' на new_base_path/имя_файла.
+        """
+        new_base = Path(new_base_path)
+        
+        for doc in self:
+            old_path = Path(doc['path'])
+            new_path = base / old_path.name
+            self.collection.update_one(
+                {'_id': ObjectId(doc['_id'])},
+                {'$set': {'path': str(new_path)}}
+            )
 
 
 class DisplayManager:
