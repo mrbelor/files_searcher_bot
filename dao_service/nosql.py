@@ -68,9 +68,9 @@ class JsonHandler:
 			print(f'JsonHandler.importFromJson {OK}: json<{file_path}> -> inserted {len(result.inserted_ids)} документов')
 
 	def __iter__(self):
-        # Позволяет итерировать по экземпляру
-        for doc in self.collection.find({}):
-            yield doc
+		#for doc in self.collection.find({}):
+			#yield doc
+		yield from self.collection.find({})
 
 
 class UtilityDBTools:
@@ -162,19 +162,19 @@ class UtilityDBTools:
 
 
 	def rebase(self, new_base_path):
-        """
-        Обходит все документы, берёт старый путь из поля 'path',
-        сохраняет имя файла и обновляет 'path' на new_base_path/имя_файла.
-        """
-        new_base = Path(new_base_path)
-        
-        for doc in self:
-            old_path = Path(doc['path'])
-            new_path = base / old_path.name
-            self.collection.update_one(
-                {'_id': ObjectId(doc['_id'])},
-                {'$set': {'path': str(new_path)}}
-            )
+		"""
+		Обходит все документы, берёт старый путь из поля 'path',
+		сохраняет имя файла и обновляет 'path' на new_base_path/имя_файла.
+		"""
+		new_base = Path(new_base_path)
+		
+		for doc in self:
+			old_path = Path(doc.get('path', ''))
+			new_path = new_base / old_path.name
+			self.collection.update_one(
+				{'_id': ObjectId(doc['_id'])},
+				{'$set': {'path': str(new_path)}}
+			)
 
 
 class DisplayManager:
@@ -459,12 +459,6 @@ class DataBase(JsonHandler, UtilityDBTools, DisplayManager):
 			subject = doc.get("tags", {}).get("subject", "—")
 			result.append(f" * {doc_id}: {filename} — {subject}")
 		return result
-	
-	def __iter__(self):
-		return iter(self.list_compact())
-
-
-	
 
 		
 	'''

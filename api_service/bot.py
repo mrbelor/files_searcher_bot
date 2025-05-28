@@ -121,7 +121,7 @@ class BotCore:
         def list_cmd(m: Message):
             if m.chat.id not in ADMIN_IDS:
                 return
-            lines = list(self.db)
+            lines = self.db.list_compact()
             if not lines:
                 text = "В базе нет документов."
             else:
