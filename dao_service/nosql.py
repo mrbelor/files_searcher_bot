@@ -412,33 +412,54 @@ class DataBase(JsonHandler, UtilityDBTools, DisplayManager):
 
 	# возврат данных о документе по id
 	def __getitem__(self, doc_id):
-		"""
-		Отображает один документ по его ID.
-		Синтаксис: instance[doc_id]
-		"""
+		"""Получение документа по ID с возможностью редактирования"""
 		try:
-			doc_id = str(doc_id).strip()  # Приводим к строке и убираем лишние пробелы (int нельзя)
-			doc_oid = ObjectId(doc_id)
-		except Exception as e:
-			print(f"DisplayManager.__getitem__ {ERROR}: Ошибка преобразования ID:\n{e}")
-			return {"message": "Ошибка преобразования ID"}
-
-		doc = self.collection.find_one({"_id": ObjectId(doc_oid)})
-		
-		if not doc:
-			print(f"DisplayManager.__getitem__ {ERROR}: Документ {doc_id} не найден.")
-			return {"message": f"Документ {doc_id} не найден."}
-		else:
-			#line = self._terminal_length('-')
-			#formatted_doc = pf(doc)
-			#print(f"{line}\nДокумент <{doc['_id']}>:\n{formatted_doc}\n{line}")
+			doc_oid = ObjectId(str(doc_id).strip())
+			doc = self.collection.find_one({"_id": doc_oid})
+			
+			if not doc:
+				print(f"{ERROR}: Документ {doc_id} не найден")
+				print(f"DisplayManager.__getitem__ {ERROR}: Ошибка преобразования ID:\n{e}")
+				return None
+				
+			# Конвертируем ObjectId в строку для удобства
+			doc['_id'] = str(doc['_id'])
 			return doc
-		
+			
+		except Exception as e:
+			print(f"{ERROR}: Ошибка доступа к документу {doc_id}:\n{e}")
+			return None
+
+	def __setitem__(self, doc_id, new_doc):
+		"""Обновление документа по ID"""
+		try:
+			# Конвертируем строковый ID в ObjectId
+			doc_OID = ObjectId(doc_id)
+			
+			# Восстанавливаем ObjectId в документе
+			new_doc['_id'] = doc_OID
+			
+			# Заменяем весь документ
+			result = self.collection.replace_one(
+				{'_id': doc_OID}, 
+				new_doc,
+				upsert=False # Запрещаем создание новых документов
+			)
+			
+			if result.matched_count == 0:
+				print(f"{ERROR}: Документ {doc_id} не найден")
+			else:
+				print(f"{OK}: Документ {doc_id} обновлён")
+			
+		except Exception as e:
+			print(f"{ERROR}: Ошибка обновления {doc_id}:\n{e}")
+
 	# в конце класса DataBase (nosql.py)
 	def distinct(self, key: str):
 		"""
 		Возвращает список уникальных значений поля key из всех документов,
 		напрямую с помощью MongoDB distinct.
+		Все ключи
 		"""
 		try:
 			return self.collection.distinct(key)
