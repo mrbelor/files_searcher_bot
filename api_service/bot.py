@@ -473,6 +473,14 @@ class BotCore:
 				e = 'ReadTimeout'
 				print(e)
 				for i in ADMIN_IDS: self.bot.send_message(i, e)
+				sleep(5)
+				continue
+
+			except requests.exceptions.ConnectionError:
+				e = 'requests.exceptions.ConnectionError'
+				print(e)
+				for i in ADMIN_IDS: self.bot.send_message(i, e)
+				sleep(5)
 				continue
 
 			except Exception:

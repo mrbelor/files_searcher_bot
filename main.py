@@ -2,7 +2,6 @@ import dao_service
 import file_manager
 import api_service
 from pathlib import Path
-from pprint import pprint as pp
 
 def main():
 	base = dao_service.DataBase(db_name='main')
