@@ -12,6 +12,7 @@ env/
 venv/
 ENV/
 pip-wheel-metadata/
+.ruff.toml
 
 # Временные файлы
 *~

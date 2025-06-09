@@ -50,31 +50,35 @@ class FileManager():
 		}
 	
 	def runFile(self, path):
-		print(f'{cb('FileManager.runFile')}: {path}')
-		path = Path(path)
+		print(f'{cb('FileManager.runFile')}: "{path}"')
+		file_path = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
 		
 		# проверка пути
-		if not path.exists():
-			print(f"FileManager.runFile {ERROR}: {path} - путь НЕ существует!")
+		if not file_path.exists():
+			print(f'FileManager.runFile {ERROR}: "{file_path}" - путь НЕ существует!')
 			return
-		elif not path.is_file():
-			print(f"FileManager.runFile {ERROR}: {path} - НЕ файл!")
+		elif not file_path.is_file():
+			print(f'FileManager.runFile {ERROR}: "{file_path}" - НЕ файл!')
 			return
 		
 		# выбор обработчика
-		parser = self.parsers.get(path.suffix, None)
+		parser = self.parsers.get(file_path.suffix, None)
 		if not parser:
-			print(f"FileManager.runFile {ERROR}: {path.name} - не поддерживаемый тип файла!")
+			print(f'FileManager.runFile {ERROR}: "{file_path.name}" - не поддерживаемый тип файла!')
 			return
 		
-		result = parser.run(path)
+		result = parser.run(file_path)
 		#print(f"{parser.__class__.__name__}")
 
 		if not result:
-			print(f'FileManager.runFile {ERROR}: {path.name} ({result=})')
+			print(f'FileManager.runFile {ERROR}: "{file_path.name}" ({result=})')
 			return result
 		else:
-			print(f'FileManager.runFile {OK}: {path.name}')
+			print(f'FileManager.runFile {OK}: "{file_path.name}"')
 	
 		if self.database:
 			self.database(result) # создаёт документ в базе
@@ -82,7 +86,11 @@ class FileManager():
 
 	def runPath(self, path):
 		print(f'FileManager.runPath: {path}')
-		directory = Path(path)
+		directory = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
 
 		# проверка пути
 		if not directory.is_dir():
@@ -139,9 +147,12 @@ class FileManager():
 			print(f'FileManager.runPath {INFO}: <{okay_counter}> <успешных> файлов')
 
 
-	def renderToPic(self, file_path, page_index = None, output_path = None, zoom=1.0):
-		file_path = Path(file_path)
-		#print(f'{cb('FileManager.renderToPic')}: {file_path}')
+	def renderToPic(self, path, page_index = None, output_path = None, zoom=1.0):
+		file_path = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
 		
 		# проверка пути к файлу
 		if not file_path.exists():
@@ -157,7 +168,7 @@ class FileManager():
 		# выбор обработчика
 		parser = self.parsers[file_path.suffix]
 		saved_path = parser.renderToPic(
-			file_path = file_path,
+			path = file_path,
 			page_index = page_index,
 			output_path = output_path,
 			zoom = zoom
@@ -377,4 +388,4 @@ if __name__ == "__main__":
 	test_one_pdf_and_render_all_pages_with_outlines()
 	#input('\n ================ ТЕСТ choose_one_page_and_render_all_outlines ================')
 	#choose_one_page_and_render_all_outlines()
-	
+

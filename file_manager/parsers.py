@@ -62,10 +62,14 @@ class BaseParser(ABC):
 	
 	
 	@staticmethod
-	def _filenameToDict(file_path:Path):
-		filename = file_path.name
-		filename = filename.replace('и\u0306','й') # fix макбуковского написания буквы й (вот так: й)
-		filename = filename.replace('е\u0308','ё') # fix макбуковского написания буквы ё (вот так: ё)
+	def _filenameToDict(path:Path):
+		# fix макбуковского написания буквы ё (вот так: ё) и буквы й (вот так: й)
+		filepath = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
+		filename = filepath.name
 
 
 		dateFormat = lambda date_str: datetime.strptime(date_str, "%Y%m%d").strftime("%d.%m.%Y") # date_str '20250313' => '13.03.2025'
@@ -101,7 +105,13 @@ class BaseParser(ABC):
 		return text.strip() # Убираем возможные пробелы в начале и конце строки
 
 	@classmethod
-	def initMetadata(cls, file_path):
+	def initMetadata(cls, path):
+		# fix макбуковского написания буквы ё (вот так: ё) и буквы й (вот так: й)
+		file_path = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
 
 		# проверка аргумента
 		if isinstance(file_path, str): # для str
@@ -129,9 +139,16 @@ class ImgParser(BaseParser):
 	Класс для парсинга ОДНОГО изображения PNG.
 	"""
 
-	def run(self, img_path):
+	def run(self, path):
+		# fix макбуковского написания буквы ё (вот так: ё) и буквы й (вот так: й)
+		img_path = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
 		print(f"{cb('ImgParser.run')}: {img_path}")
 		
+
 		RESULT_dict = self.initMetadata(img_path) # classmethod можно вызывать и через экземпляр.
 		
 		ocr_text, ocr_words = self.ocrEngine(img_path) # сканирование с помощью OCR метода
@@ -160,7 +177,14 @@ class PdfParser(BaseParser):
 	_renderToPicServise(cls, page, output_path) - сервисная функция рендера одной страницы в картинку
 	"""
 
-	def run(self, pdf_path):
+	def run(self, path):
+		# fix макбуковского написания буквы ё (вот так: ё) и буквы й (вот так: й)
+		pdf_path = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
+
 		pdf_path = Path(pdf_path)
 		print(f"{cb('PdfParser.run')}: {pdf_path}")
 
@@ -315,21 +339,26 @@ class PdfParser(BaseParser):
 			#print(f"PdfParser._renderToPicServise {OK} to {output_path.relative_to(Path.cwd())}")
 			pass
 	
-	def renderToPic(self, file_path, page_index=None, output_path=None, zoom=1.0):
+	def renderToPic(self, path, page_index=None, output_path=None, zoom=1.0):
 		'''docstring for PdfParser.renderToPic
 		работает в двух режимах:
 		1. если указана страница, то рендерится одна страница
 		2. если не указана страница, то рендерится весь документ
 
 		arguments:
-			file_path - путь к файлу (str, Path)
+			path - путь к файлу (str, Path)
 			page_number - номер страницы (int, None) (если не указан, то рендерится весь документ)
 			output_path - путь к выходному файлу (str, Path, None) (если не указан, то будет создан в TEMP_FOLDER)
 			zoom - коэффициент масштабирования (float, 1.0)
 		return:
 			output_path - путь к выходному файлу
 		'''
-		file_path = Path(file_path)
+		# fix макбуковского написания буквы ё (вот так: ё) и буквы й (вот так: й)
+		file_path = Path(
+			str(Path(path).resolve())
+				.replace('и\u0306','й')
+				.replace('е\u0308','ё')
+		)
 
 		# Если путь к выходному файлу не указан, выбираем его по умолчанию 
 		if not output_path:
